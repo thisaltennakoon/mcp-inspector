@@ -31330,7 +31330,7 @@ const Gw = (t, e) => {
   }, [t]), dr(() => {
     l(e || "");
   }, [e]);
-  const y = "test-key", x = $a(), [E, h] = Nt(null), [b, S] = Nt(), R = La(0), {
+  const y = "Authorization", x = $a(), [E, h] = Nt(null), [b, S] = Nt(), R = La(0), {
     connectionStatus: O,
     serverCapabilities: C,
     mcpClient: _,
