@@ -60,7 +60,7 @@ const App = ({
     setToken(initialToken || '');
   }, [initialToken]);
 
-  const headerName = 'test-key';
+  const headerName = 'Authorization';
   const intl = useIntl();
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [nextToolCursor, setNextToolCursor] = useState<string | undefined>();
