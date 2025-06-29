@@ -1,7 +1,7 @@
 // import HelloWorld from './HelloWorld';
-import MainApp from './app/MCPInspector.jsx'
+import MCPInspector from './app/MCPInspector.jsx'
 
 // Named export
-export { MainApp };
+export { MCPInspector };
 // Default export (must be the component itself, not an object)
-export default MainApp;
+export default MCPInspector;

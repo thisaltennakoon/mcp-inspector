@@ -6,12 +6,10 @@ import {
   ListToolsResultSchema,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
-import { FormattedMessage, useIntl } from 'react-intl';
 import React, { useEffect, useRef, useState } from 'react';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { z } from 'zod';
 import { Box, Grid, Typography } from '@material-ui/core';
-import Page from './components/ui/layouts/Page';
 import { MenuSubAPIManagement } from './components/ui/Icons/generated';
 import MCPInspectorConnect from './components/ui/Images/Templates/MCPInspectorConect.svg';
 import { cacheToolOutputSchemas } from './utils/schemaUtils';
@@ -65,7 +63,6 @@ const Inspector = ({
     setToken(initialToken || '');
   }, [initialToken]);
 
-  const intl = useIntl();
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [nextToolCursor, setNextToolCursor] = useState<string | undefined>();
   const progressTokenRef = useRef(0);
@@ -156,148 +153,136 @@ const Inspector = ({
   };
 
   return (
-    <Page
-      title={intl.formatMessage({
-        defaultMessage: 'MCP Inspector',
-        id: 'pages.MCP.Inspector.Title',
-      })}
-    >
-      <Box className={classes.componentLevelPageContainer}>
-        <Typography variant="h2">
-          <FormattedMessage
-            id="pages.MCP.Inspector.Title"
-            defaultMessage="MCP Inspector"
+    <Box className={classes.componentLevelPageContainer}>
+      <h2>MCP Inspector</h2>
+      <Grid container md={12}>
+        <Grid item xs={12} md={3} className={classes.inspectorSlider}>
+          <Sidebar
+            connectionStatus={connectionStatus}
+            url={url}
+            setUrl={setUrl}
+            token={token}
+            setToken={setToken}
+            headerName={headerName}
+            setHeaderName={setHeaderName}
+            shouldSetHeaderNameExternally={shouldSetHeaderNameExternally}
+            isTokenFetching={isTokenFetching}
+            isUrlFetching={isUrlFetching}
+            handleTokenRegenerate={handleTokenRegenerate}
+            onConnect={connectMcpServer}
+            onDisconnect={disconnectMcpServer}
           />
-        </Typography>
-        <Grid container md={12}>
-          <Grid item xs={12} md={3} className={classes.inspectorSlider}>
-            <Sidebar
-              connectionStatus={connectionStatus}
-              url={url}
-              setUrl={setUrl}
-              token={token}
-              setToken={setToken}
-              headerName={headerName}
-              setHeaderName={setHeaderName}
-              shouldSetHeaderNameExternally={shouldSetHeaderNameExternally}
-              isTokenFetching={isTokenFetching}
-              isUrlFetching={isUrlFetching}
-              handleTokenRegenerate={handleTokenRegenerate}
-              onConnect={connectMcpServer}
-              onDisconnect={disconnectMcpServer}
-            />
-          </Grid>
-          <Grid item xs={12} md={8} className={classes.inspectorRightSlider}>
-            <Box className={classes.inspectorResult}>
-              {mcpClient ? (
-                <Tabs
-                  defaultValue="tools"
-                  className="w-full p-4"
-                  onValueChange={(value) => {
-                    window.location.hash = value;
-                  }}
-                >
-                  <TabsList className={classes.tabsList}>
-                    <TabsTrigger value="tools" className={classes.tabTrigger}>
-                      <MenuSubAPIManagement className={classes.tabIcon} />
-                      Tools
-                    </TabsTrigger>
-                    <TabsTrigger value="ping" className={classes.tabTrigger}>
-                      <NotificationsIcon className={classes.tabIcon} />
-                      Ping
-                    </TabsTrigger>
-                  </TabsList>
-
-                  <div className="w-full">
-                    {!serverCapabilities?.tools ? (
-                      <>
-                        <div className="flex items-center justify-center p-4">
-                          <p className="text-lg text-gray-500 dark:text-gray-400">
-                            The connected server does not support any MCP
-                            capabilities
-                          </p>
-                        </div>
-                        <PingTab
-                          onPingClick={() => {
-                            sendMCPRequest(
-                              {
-                                method: 'ping' as const,
-                              },
-                              EmptyResultSchema
-                            ).catch((e) => {
-                              console.error('Ping failed:', e);
-                            });
-                          }}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <ToolsTab
-                          tools={tools}
-                          listTools={() => {
-                            clearError('tools');
-                            listTools();
-                          }}
-                          clearTools={() => {
-                            setTools([]);
-                            setNextToolCursor(undefined);
-                            // Clear cached output schemas
-                            cacheToolOutputSchemas([]);
-                          }}
-                          callTool={async (name, params) => {
-                            clearError('tools');
-                            setToolResult(null);
-                            await callTool(name, params);
-                          }}
-                          selectedTool={selectedTool}
-                          setSelectedTool={(tool) => {
-                            clearError('tools');
-                            setSelectedTool(tool);
-                            setToolResult(null);
-                          }}
-                          toolResult={toolResult}
-                          nextCursor={nextToolCursor}
-                          isMcpProxyWithOperationMapping={
-                            isMcpProxyWithOperationMapping
-                          }
-                        />
-                        <ConsoleTab />
-                        <PingTab
-                          onPingClick={() => {
-                            sendMCPRequest(
-                              {
-                                method: 'ping' as const,
-                              },
-                              EmptyResultSchema
-                            ).catch((e) => {
-                              console.error('Ping failed:', e);
-                            });
-                          }}
-                        />
-                      </>
-                    )}
-                  </div>
-                </Tabs>
-              ) : (
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Box>
-                    <img src={MCPInspectorConnect} alt="MCP Inspector Connect" />
-                  </Box>
-                  <Typography variant="h4">
-                    Connect to an MCP server to start inspecting
-                  </Typography>
-                </Box>
-              )}
-            </Box>
-          </Grid>
         </Grid>
-      </Box>
-    </Page>
+        <Grid item xs={12} md={8} className={classes.inspectorRightSlider}>
+          <Box className={classes.inspectorResult}>
+            {mcpClient ? (
+              <Tabs
+                defaultValue="tools"
+                className="w-full p-4"
+                onValueChange={(value) => {
+                  window.location.hash = value;
+                }}
+              >
+                <TabsList className={classes.tabsList}>
+                  <TabsTrigger value="tools" className={classes.tabTrigger}>
+                    <MenuSubAPIManagement className={classes.tabIcon} />
+                    Tools
+                  </TabsTrigger>
+                  <TabsTrigger value="ping" className={classes.tabTrigger}>
+                    <NotificationsIcon className={classes.tabIcon} />
+                    Ping
+                  </TabsTrigger>
+                </TabsList>
+
+                <div className="w-full">
+                  {!serverCapabilities?.tools ? (
+                    <>
+                      <div className="flex items-center justify-center p-4">
+                        <p className="text-lg text-gray-500 dark:text-gray-400">
+                          The connected server does not support any MCP
+                          capabilities
+                        </p>
+                      </div>
+                      <PingTab
+                        onPingClick={() => {
+                          sendMCPRequest(
+                            {
+                              method: 'ping' as const,
+                            },
+                            EmptyResultSchema
+                          ).catch((e) => {
+                            console.error('Ping failed:', e);
+                          });
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <ToolsTab
+                        tools={tools}
+                        listTools={() => {
+                          clearError('tools');
+                          listTools();
+                        }}
+                        clearTools={() => {
+                          setTools([]);
+                          setNextToolCursor(undefined);
+                          // Clear cached output schemas
+                          cacheToolOutputSchemas([]);
+                        }}
+                        callTool={async (name, params) => {
+                          clearError('tools');
+                          setToolResult(null);
+                          await callTool(name, params);
+                        }}
+                        selectedTool={selectedTool}
+                        setSelectedTool={(tool) => {
+                          clearError('tools');
+                          setSelectedTool(tool);
+                          setToolResult(null);
+                        }}
+                        toolResult={toolResult}
+                        nextCursor={nextToolCursor}
+                        isMcpProxyWithOperationMapping={
+                          isMcpProxyWithOperationMapping
+                        }
+                      />
+                      <ConsoleTab />
+                      <PingTab
+                        onPingClick={() => {
+                          sendMCPRequest(
+                            {
+                              method: 'ping' as const,
+                            },
+                            EmptyResultSchema
+                          ).catch((e) => {
+                            console.error('Ping failed:', e);
+                          });
+                        }}
+                      />
+                    </>
+                  )}
+                </div>
+              </Tabs>
+            ) : (
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Box>
+                  <img src={MCPInspectorConnect} alt="MCP Inspector Connect" />
+                </Box>
+                <Typography variant="h4">
+                  Connect to an MCP server to start inspecting
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
