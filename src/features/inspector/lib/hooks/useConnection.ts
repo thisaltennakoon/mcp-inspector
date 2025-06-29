@@ -10,7 +10,6 @@ import { RequestOptions } from '@modelcontextprotocol/sdk/shared/protocol.js';
 import { useState } from 'react';
 import { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { z } from 'zod';
-import { useIntl } from 'react-intl';
 import useChoreoSnackbar from '../../components/ui/hooks/choreoSnackbar';
 import { ConnectionStatus } from '../constants';
 import { Notification } from '../notificationTypes';
@@ -29,7 +28,6 @@ export function useConnection({
   const [connectionStatus, setConnectionStatus] =
     useState<ConnectionStatus>('disconnected');
   const showSnackbar = useChoreoSnackbar();
-  const intl = useIntl();
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
   const [mcpClient, setMcpClient] = useState<Client | null>(null);
@@ -40,7 +38,6 @@ export function useConnection({
   /**
    * Shows an error snackbar with the given error message, truncated if necessary.
    * @param {string} errorString - The error message to display.
-   * @param {object} intl - The react-intl object for formatting messages.
    * @param {function} showSnackbar - The snackbar function to show messages.
    */
   function showErrorSnackbar(errorString: string) {
@@ -51,11 +48,8 @@ export function useConnection({
         : errorString;
 
     showSnackbar(
-      intl.formatMessage({
-        defaultMessage: truncatedErrorString,
-        id: 'pages.MCP.Inspector.useConnection.makeRequest',
-      }),
-      { variant: 'error' }
+        truncatedErrorString,
+        {variant: 'error'}
     );
   }
 

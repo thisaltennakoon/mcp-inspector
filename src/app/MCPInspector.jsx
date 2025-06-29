@@ -1,6 +1,5 @@
 import {ThemeProvider} from '@material-ui/core/styles';
 import useChoreoTheme from './theme/Theme.ts';
-import {IntlProvider} from 'react-intl';
 import Inspector from '../features/inspector/Inspector';
 import {ChoreoSnackbarProvider} from "../features/inspector/components/ui/Snackbar/SnackbarProvider";
 
@@ -9,11 +8,9 @@ function MCPInspector() {
     return (
         <>
             <ThemeProvider theme={theme}>
-                <IntlProvider locale="en" messages={{}}>
-                    <ChoreoSnackbarProvider>
-                        <Inspector/>
-                    </ChoreoSnackbarProvider>
-                </IntlProvider>
+                <ChoreoSnackbarProvider>
+                    <Inspector/>
+                </ChoreoSnackbarProvider>
             </ThemeProvider>
         </>
     )

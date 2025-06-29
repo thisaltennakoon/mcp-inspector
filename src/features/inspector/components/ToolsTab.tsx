@@ -7,7 +7,6 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress, Grid, Typography } from '@material-ui/core';
-import { FormattedMessage } from 'react-intl';
 import Notification from './ui/Notification/Notification';
 import { Promote } from './ui/Icons/generated';
 import TextInput from './ui/TextInput/TextInput';
@@ -309,10 +308,9 @@ const ToolsTab = ({
                     />
                   </div>
                 ) : (
-                  <FormattedMessage
-                    id="pages.MCP.Inspector.ToolsTab.ToolResults"
-                    defaultMessage="Select a tool from the list to view its details and run it"
-                  />
+                    <>
+                      Select a tool from the list to view its details and run it.
+                    </>
                 )}
               </div>
             )}
