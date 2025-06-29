@@ -10,7 +10,6 @@ import { RequestOptions } from '@modelcontextprotocol/sdk/shared/protocol.js';
 import { useState } from 'react';
 import { Transport } from '@modelcontextprotocol/sdk/shared/transport.js';
 import { z } from 'zod';
-import useChoreoSnackbar from '../../components/ui/hooks/choreoSnackbar';
 import { ConnectionStatus } from '../constants';
 import { Notification } from '../notificationTypes';
 
@@ -27,7 +26,6 @@ export function useConnection({
 }: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] =
     useState<ConnectionStatus>('disconnected');
-  const showSnackbar = useChoreoSnackbar();
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
   const [mcpClient, setMcpClient] = useState<Client | null>(null);
@@ -40,17 +38,13 @@ export function useConnection({
    * @param {string} errorString - The error message to display.
    * @param {function} showSnackbar - The snackbar function to show messages.
    */
-  function showErrorSnackbar(errorString: string) {
+  function showError(errorString: string) {
     const MAX_ERROR_LENGTH = 200;
     const truncatedErrorString =
       errorString.length > MAX_ERROR_LENGTH
         ? `${errorString.substring(0, MAX_ERROR_LENGTH)}...`
         : errorString;
-
-    showSnackbar(
-        truncatedErrorString,
-        {variant: 'error'}
-    );
+    console.error(truncatedErrorString);
   }
 
   const makeRequest = async <T extends z.ZodType>(
@@ -71,7 +65,7 @@ export function useConnection({
     } catch (e: unknown) {
       if (!options?.suppressToast) {
         const errorString = (e as Error).message ?? String(e);
-        showErrorSnackbar(errorString);
+        showError(errorString);
       }
       throw e;
     }
@@ -140,13 +134,13 @@ export function useConnection({
         setConnectionStatus('error');
 
         if (is401Error(error)) {
-          showErrorSnackbar(
+          showError(
             'Internal key authentication failed. Make sure ' +
               'you have provided the correct security credentials'
           );
           return;
         }
-        showErrorSnackbar(
+        showError(
           error instanceof Error ? error.message : String(error)
         );
         throw error;
