@@ -18,6 +18,9 @@ interface SidebarProps {
   setUrl: (url: string) => void;
   token?: string;
   setToken: (token: string) => void;
+  headerName: string;
+  setHeaderName: (headerName: string) => void;
+  shouldSetHeaderNameExternally: boolean;
   isTokenFetching?: boolean;
   isUrlFetching?: boolean;
   handleTokenRegenerate?: () => void;
@@ -31,6 +34,9 @@ const Sidebar = ({
   setUrl,
   token,
   setToken,
+  headerName,
+  setHeaderName,
+  shouldSetHeaderNameExternally,
   isTokenFetching,
   isUrlFetching,
   handleTokenRegenerate,
@@ -73,6 +79,15 @@ const Sidebar = ({
                 placeholder="Enter URL"
               />
             )}
+            {shouldSetHeaderNameExternally &&
+                <TextInput
+                    label="Header Name"
+                    testId="header-name-input"
+                    fullWidth
+                    value={headerName}
+                    onChange={(e) => setHeaderName(e.target.value)}
+                    placeholder="Enter Header Name"
+                />}
             {isTokenFetching ? (
               <Box display="flex" justifyContent="center" alignItems="center" minHeight="60px">
                 <CircularProgress size={30} />

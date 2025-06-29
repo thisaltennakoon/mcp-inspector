@@ -26,6 +26,8 @@ import { useStyles } from './style';
 interface InspectorProps {
   url?: string;
   token?: string;
+  headerName?: string;
+  shouldSetHeaderNameExternally?: boolean;
   isTokenFetching?: boolean;
   isUrlFetching?: boolean;
   handleTokenRegenerate?: () => void;
@@ -35,6 +37,8 @@ interface InspectorProps {
 const Inspector = ({
   url: initialUrl,
   token: initialToken,
+  headerName: initialHeaderName,
+  shouldSetHeaderNameExternally,
   isTokenFetching,
   isUrlFetching,
   handleTokenRegenerate,
@@ -43,6 +47,7 @@ const Inspector = ({
   const classes = useStyles();
   const [token, setToken] = useState<string>();
   const [url, setUrl] = useState<string>();
+  const [headerName, setHeaderName] = useState<string>(initialHeaderName|| 'Authorization');
   const [tools, setTools] = useState<Tool[]>([]);
   const [toolResult, setToolResult] =
     useState<CompatibilityCallToolResult | null>(null);
@@ -60,7 +65,6 @@ const Inspector = ({
     setToken(initialToken || '');
   }, [initialToken]);
 
-  const headerName = 'Authorization';
   const intl = useIntl();
   const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
   const [nextToolCursor, setNextToolCursor] = useState<string | undefined>();
@@ -173,6 +177,9 @@ const Inspector = ({
               setUrl={setUrl}
               token={token}
               setToken={setToken}
+              headerName={headerName}
+              setHeaderName={setHeaderName}
+              shouldSetHeaderNameExternally={shouldSetHeaderNameExternally}
               isTokenFetching={isTokenFetching}
               isUrlFetching={isUrlFetching}
               handleTokenRegenerate={handleTokenRegenerate}
