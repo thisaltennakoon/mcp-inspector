@@ -1,18 +1,17 @@
 import {ThemeProvider} from '@material-ui/core/styles';
-import useChoreoTheme from './theme/Theme.js';
+import useChoreoTheme from './theme/Theme.ts';
 import {IntlProvider} from 'react-intl';
-import App from './MCPInspector/index';
-import {SnackbarProvider} from 'notistack';
-import {ChoreoSnackbarProvider} from "./MCPInspector/components/ui/Snackbar/SnackbarProvider";
+import Inspector from '../features/inspector/Inspector';
+import {ChoreoSnackbarProvider} from "../features/inspector/components/ui/Snackbar/SnackbarProvider";
 
-function MainApp() {
+function MCPInspector() {
     const theme = useChoreoTheme(false);
     return (
         <>
             <ThemeProvider theme={theme}>
                 <IntlProvider locale="en" messages={{}}>
                     <ChoreoSnackbarProvider>
-                        <App/>
+                        <Inspector/>
                     </ChoreoSnackbarProvider>
                 </IntlProvider>
             </ThemeProvider>
@@ -20,4 +19,4 @@ function MainApp() {
     )
 }
 
-export default MainApp
+export default MCPInspector

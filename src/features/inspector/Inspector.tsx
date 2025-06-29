@@ -23,7 +23,7 @@ import Sidebar from './components/Sidebar';
 import ToolsTab from './components/ToolsTab';
 import { useStyles } from './style';
 
-interface AppProps {
+interface InspectorProps {
   url?: string;
   token?: string;
   isTokenFetching?: boolean;
@@ -32,14 +32,14 @@ interface AppProps {
   isMcpProxyWithOperationMapping?: boolean;
 }
 
-const App = ({
+const Inspector = ({
   url: initialUrl,
   token: initialToken,
   isTokenFetching,
   isUrlFetching,
   handleTokenRegenerate,
   isMcpProxyWithOperationMapping,
-}: AppProps) => {
+}: InspectorProps) => {
   const classes = useStyles();
   const [token, setToken] = useState<string>();
   const [url, setUrl] = useState<string>();
@@ -294,4 +294,4 @@ const App = ({
   );
 };
 
-export default App;
+export default Inspector;

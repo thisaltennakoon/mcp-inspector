@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MainApp from './MainApp.jsx'
+import MCPInspector from './app/MCPInspector.jsx'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <MainApp />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <MCPInspector/>
+    </React.StrictMode>,
+    document.getElementById('root')
 )

@@ -1,5 +1,5 @@
 // import HelloWorld from './HelloWorld';
-import MainApp from './MainApp.jsx'
+import MainApp from './app/MCPInspector.jsx'
 
 // Named export
 export { MainApp };
