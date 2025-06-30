@@ -44,17 +44,6 @@ const Sidebar = ({
   onDisconnect,
 }: SidebarProps) => {
   const [showBearerToken, setShowBearerToken] = useState(false);
-  const [isConnecting, setIsConnecting] = useState(false);
-
-  useEffect(() => {
-    if (
-      connectionStatus === 'connected' ||
-      connectionStatus.startsWith('error')
-    ) {
-      setIsConnecting(false);
-    }
-  }, [connectionStatus]);
-
   const [showPassword, toggleInputType] = React.useState(false);
   const handleEndButtonClick = () => {
     toggleInputType(!showPassword);
@@ -165,7 +154,6 @@ const Sidebar = ({
                   fullWidth
                   className="w-full"
                   onClick={() => {
-                    setIsConnecting(true);
                     onConnect();
                   }}
                   testId=""
@@ -183,7 +171,7 @@ const Sidebar = ({
               alignItems="center"
               gridGap={12}
             >
-              {!isConnecting && (
+              {connectionStatus !== 'connecting' && (
                 <Box
                   width={12}
                   height={12}
@@ -204,12 +192,12 @@ const Sidebar = ({
                 />
               )}
 
-              {isConnecting && (
+              {connectionStatus === 'connecting' && (
                 <CircularProgress size={14} style={{ color: 'blue' }} />
               )}
 
               <span style={{ fontSize: '14px' }}>
-                {isConnecting
+                {connectionStatus === 'connecting'
                   ? 'Connecting...'
                   : (() => {
                       switch (connectionStatus) {

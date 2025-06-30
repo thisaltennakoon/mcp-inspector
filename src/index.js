@@ -1,5 +1,5 @@
 // import HelloWorld from './HelloWorld';
-import MCPInspector from './app/MCPInspector.jsx'
+import MCPInspector from './app/MCPInspector.tsx'
 
 // Named export
 export { MCPInspector };

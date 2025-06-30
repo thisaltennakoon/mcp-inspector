@@ -5,8 +5,8 @@
   "module": "dist/mcp-inspector.es.js",
   "exports": {
     ".": {
-      "import": "./dist/mcp-inspector-lib.es.js",
-      "require": "./dist/mcp-inspector-lib.umd.js"
+      "import": "./dist/mcp-inspector.es.js",
+      "require": "./dist/mcp-inspector.umd.js"
     }
   },
   "types": "dist/index.d.ts",

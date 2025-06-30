@@ -1,10 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MCPInspector from './app/MCPInspector.jsx'
+import MCPInspector from './app/MCPInspector.tsx'
 
 ReactDOM.render(
     <React.StrictMode>
-        <MCPInspector/>
+        <MCPInspector
+            shouldSetHeaderNameExternally={true}
+        />
     </React.StrictMode>,
     document.getElementById('root')
 )
