@@ -39,7 +39,7 @@
     "type": "dark"
   },
   "typography": {
-    "fontFamily": "Gilmer",
+    "fontFamily": "montserrat",
     "h1": {
       "fontSize": 43,
       "fontWeight": "bold",
