@@ -26600,7 +26600,7 @@ const E3 = (r, e) => {
     }
   };
   return /* @__PURE__ */ k.jsxs(Be, { className: l.componentLevelPageContainer, children: [
-    /* @__PURE__ */ k.jsx(zt, { variant: "h3", children: "MCP Inspector" }),
+    /* @__PURE__ */ k.jsx(zt, { variant: "h3", children: "MCP Playground" }),
     /* @__PURE__ */ k.jsxs(pn, { container: !0, md: 12, children: [
       /* @__PURE__ */ k.jsx(pn, { item: !0, xs: 12, md: 3, className: l.inspectorSlider, children: /* @__PURE__ */ k.jsx(
         H5,
