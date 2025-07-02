@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Inspector - Theme Customization Demo</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .demo-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .demo-header {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .demo-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>MCP Inspector - Theme Customization Demo</h1>
+        
+        <div class="demo-section">
+            <div class="demo-header">Quick Start Example</div>
+            <div class="demo-description">
+                The simplest way to customize the font family across the entire component library:
+            </div>
+            <div class="code-block">
+import MCPInspector from 'mcp-inspector';
+
+function App() {
+  const customTheme = {
+    typography: {
+      fontFamily: '"Inter", "Roboto", "Arial", sans-serif',
+    },
+  };
+
+  return (
+    &lt;MCPInspector 
+      url="wss://your-mcp-server"
+      themeCustomization={customTheme}
+    /&gt;
+  );
+}
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-header">Comprehensive Customization</div>
+            <div class="demo-description">
+                Example showing colors, typography, spacing, and component-specific customizations:
+            </div>
+            <div class="code-block">
+const customTheme = {
+  typography: {
+    fontFamily: '"Poppins", "Inter", "Roboto", sans-serif',
+    h1: { fontWeight: 700, letterSpacing: '-0.02em' },
+    body1: { fontSize: '14px', lineHeight: 1.6 },
+  },
+  palette: {
+    primary: {
+      main: '#6366f1', // Indigo
+      light: '#818cf8',
+      dark: '#4f46e5',
+    },
+    secondary: {
+      main: '#8b5cf6', // Purple
+    },
+  },
+  shape: {
+    borderRadius: 8,
+  },
+  custom: {
+    colors: {
+      accent: '#f59e0b', // Amber
+      muted: '#6b7280',
+    },
+    components: {
+      button: {
+        borderRadius: 6,
+        fontWeight: 600,
+      },
+      card: {
+        borderRadius: 12,
+        shadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      },
+    },
+  },
+};
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-header">Using Predefined Presets</div>
+            <div class="demo-description">
+                The library comes with several predefined theme presets for common use cases:
+            </div>
+            <div class="code-block">
+import { themePresets } from 'mcp-inspector';
+
+// Modern theme with Inter font and contemporary styling
+&lt;MCPInspector themeCustomization={themePresets.modern} /&gt;
+
+// Compact theme with condensed fonts and tighter spacing
+&lt;MCPInspector themeCustomization={themePresets.compact} /&gt;
+
+// Rounded theme with highly rounded corners
+&lt;MCPInspector themeCustomization={themePresets.rounded} /&gt;
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-header">Dark Mode with Custom Colors</div>
+            <div class="demo-description">
+                Enable dark mode with customized colors optimized for dark themes:
+            </div>
+            <div class="code-block">
+const darkCustomTheme = {
+  palette: {
+    primary: {
+      main: '#60a5fa', // Lighter blue for dark mode
+    },
+    background: {
+      default: '#0f172a',
+      paper: '#1e293b',
+    },
+    text: {
+      primary: '#f8fafc',
+      secondary: '#cbd5e1',
+    },
+  },
+};
+
+&lt;MCPInspector 
+  darkMode={true}
+  themeCustomization={darkCustomTheme}
+/&gt;
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-header">Advanced Material-UI Overrides</div>
+            <div class="demo-description">
+                For fine-grained control, use Material-UI's override system:
+            </div>
+            <div class="code-block">
+const advancedTheme = {
+  overrides: {
+    MuiButton: {
+      root: {
+        textTransform: 'none',
+        borderRadius: '6px',
+        fontWeight: 500,
+        '&:hover': {
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.12)',
+        },
+      },
+    },
+    MuiTextField: {
+      root: {
+        '& .MuiOutlinedInput-root': {
+          borderRadius: '8px',
+          '&.Mui-focused fieldset': {
+            borderColor: '#6366f1',
+            borderWidth: '2px',
+          },
+        },
+      },
+    },
+  },
+};
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-header">Key Features</div>
+            <div class="demo-description">
+                <ul>
+                    <li><strong>Style Isolation:</strong> Styles are scoped and won't affect your parent application</li>
+                    <li><strong>TypeScript Support:</strong> Full type safety for all customization options</li>
+                    <li><strong>Predefined Presets:</strong> Ready-to-use themes for common design patterns</li>
+                    <li><strong>Flexible API:</strong> From simple font changes to complex Material-UI overrides</li>
+                    <li><strong>Dark Mode Support:</strong> Built-in dark mode with custom color support</li>
+                    <li><strong>Component-Specific Styling:</strong> Fine-tune individual component styles</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <div class="demo-header">Next Steps</div>
+            <div class="demo-description">
+                <p>For complete documentation and more examples, see:</p>
+                <ul>
+                    <li><strong>THEME_CUSTOMIZATION.md</strong> - Comprehensive theming guide</li>
+                    <li><strong>ThemeCustomizationExamples.tsx</strong> - Working code examples</li>
+                    <li><strong>TypeScript definitions</strong> - Full type definitions for all customization options</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

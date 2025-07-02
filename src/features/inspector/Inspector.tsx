@@ -32,15 +32,17 @@ interface InspectorProps {
   isMcpProxyWithOperationMapping?: boolean;
 }
 
+export type { InspectorProps };
+
 const Inspector = ({
   url: initialUrl,
   token: initialToken,
   headerName: initialHeaderName,
-  shouldSetHeaderNameExternally,
-  isTokenFetching,
-  isUrlFetching,
+  shouldSetHeaderNameExternally = false,
+  isTokenFetching = false,
+  isUrlFetching = false,
   handleTokenRegenerate,
-  isMcpProxyWithOperationMapping,
+  isMcpProxyWithOperationMapping = false,
 }: InspectorProps) => {
   const classes = useStyles();
   const [token, setToken] = useState<string>();

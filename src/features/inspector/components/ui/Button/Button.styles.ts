@@ -17,11 +17,11 @@ export const useButtonStyles = makeStyles((theme: Theme) =>
   createStyles({
     commons: {
       boxShadow: `0 1px 2px  ${alpha(theme.palette.common.black, 0.15)}`,
-      borderRadius: 5,
+      borderRadius: theme.custom?.components?.button?.borderRadius || theme.shape?.borderRadius || 5,
       color: theme.palette.common.white,
       padding: theme.spacing(0.875, 2),
       gap: theme.spacing(1),
-      fontWeight: 400,
+      fontWeight: theme.custom?.components?.button?.fontWeight || 400,
       fontSize: theme.spacing(1.625),
       lineHeight: `${theme.spacing(3)}px`,
       '&$disabled': {
