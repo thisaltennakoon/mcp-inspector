@@ -14699,7 +14699,7 @@ function Ey({
       });
       const I = new ey(
         {
-          name: "mcp-inspector",
+          name: "mcp-playground",
           version: "0.13.0"
         },
         {
@@ -14739,7 +14739,7 @@ function Ey({
           });
         } catch (N) {
           if (console.error(
-            `Failed to connect to MCP Server via the MCP Inspector Proxy: ${C}:`,
+            `Failed to connect to MCP Server via the MCP Playground Proxy: ${C}:`,
             N
           ), t("error"), S(N)) {
             const U = "Internal key authentication failed. Make sure you have provided the correct security credentials";
@@ -18145,7 +18145,7 @@ const M5 = rr(
         {
           onClick: r,
           className: "font-bold py-6 px-12 rounded-full",
-          testId: "inspector-ping-btn",
+          testId: "playground-ping-btn",
           children: "Ping Server"
         }
       ),
@@ -18960,7 +18960,7 @@ const z5 = rr((r) => ({
           onClick: d,
           "data-testid": "auth-button",
           "aria-expanded": v,
-          testId: "inspector-Authentication",
+          testId: "playground-Authentication",
           children: "Get Test Key"
         }
       ) })
@@ -19047,7 +19047,7 @@ const z5 = rr((r) => ({
                 case "error":
                   return "Connection Error!";
                 case "error-connecting-to-proxy":
-                  return "Error Connecting to MCP Inspector Proxy - Check Console logs";
+                  return "Error Connecting to MCP Playground Proxy - Check Console logs";
                 default:
                   return "Disconnected";
               }
@@ -25914,7 +25914,7 @@ const Or = Su(
             variant: "subtle",
             className: n.copyButton,
             onClick: s,
-            testId: "inspector-response-copy",
+            testId: "playground-response-copy",
             children: t ? /* @__PURE__ */ k.jsx(Q1, { className: n.copySuccessIcon }) : /* @__PURE__ */ k.jsx(Y1, { className: n.copyIcon })
           }
         ) }),
@@ -26244,7 +26244,7 @@ const S3 = (r, e) => {
           icon: "info",
           color: "primary",
           testId: "notification-with-icon",
-          children: "Tool calls for MCP servers created using existing API proxies are not yet supported in this inspector."
+          children: "Tool calls for MCP servers created using existing API proxies are not yet supported in this playground."
         }
       ) }) : /* @__PURE__ */ k.jsx(
         "div",
@@ -26586,7 +26586,7 @@ const S3 = (r, e) => {
     gap: r.spacing(2),
     padding: r.spacing(3)
   },
-  inspectorSlider: {
+  playgroundSlider: {
     border: `1px solid ${r.palette.grey[200]}`,
     padding: r.spacing(2),
     borderRadius: r.spacing(1),
@@ -26594,13 +26594,13 @@ const S3 = (r, e) => {
     boxShadow: `0 0 1px ${r.palette.secondary.main}, 0 1px 2px ${r.palette.grey[100]}`,
     marginRight: r.spacing(1)
   },
-  inspectorRightSlider: {
+  playgroundRightSlider: {
     // border: `1px solid ${theme.palette.grey[200]}`,
     padding: r.spacing(0, 2),
     borderRadius: r.spacing(1),
     marginRight: r.spacing(1)
   },
-  inspectorResult: {
+  playgroundResult: {
     overflow: "auto",
     minHeight: r.spacing(90),
     borderBottom: `1px solid ${r.palette.grey[200]}`
@@ -26751,7 +26751,7 @@ const S3 = (r, e) => {
   return /* @__PURE__ */ k.jsxs(Te, { className: l.componentLevelPageContainer, children: [
     /* @__PURE__ */ k.jsx(Dt, { variant: "h3", children: "MCP Playground" }),
     /* @__PURE__ */ k.jsxs(pn, { container: !0, md: 12, children: [
-      /* @__PURE__ */ k.jsx(pn, { item: !0, xs: 12, md: 3, className: l.inspectorSlider, children: /* @__PURE__ */ k.jsx(
+      /* @__PURE__ */ k.jsx(pn, { item: !0, xs: 12, md: 3, className: l.playgroundSlider, children: /* @__PURE__ */ k.jsx(
         V5,
         {
           connectionStatus: C,
@@ -26770,10 +26770,10 @@ const S3 = (r, e) => {
           onDisconnect: D
         }
       ) }),
-      /* @__PURE__ */ k.jsx(pn, { item: !0, xs: 12, md: 8, className: l.inspectorRightSlider, children: /* @__PURE__ */ k.jsx(
+      /* @__PURE__ */ k.jsx(pn, { item: !0, xs: 12, md: 8, className: l.playgroundRightSlider, children: /* @__PURE__ */ k.jsx(
         Te,
         {
-          className: l.inspectorResult,
+          className: l.playgroundResult,
           style: {
             display: "flex",
             flexDirection: "column",
@@ -26897,7 +26897,7 @@ const S3 = (r, e) => {
               justifyContent: "center",
               style: { flex: "1 1 auto" },
               children: [
-                /* @__PURE__ */ k.jsx(Te, { children: /* @__PURE__ */ k.jsx("img", { src: X1, alt: "MCP Inspector Connect" }) }),
+                /* @__PURE__ */ k.jsx(Te, { children: /* @__PURE__ */ k.jsx("img", { src: X1, alt: "MCP Playground Connect" }) }),
                 /* @__PURE__ */ k.jsx(Dt, { variant: "h4", children: "Connect to an MCP server to start inspecting" })
               ]
             }
@@ -26907,14 +26907,14 @@ const S3 = (r, e) => {
     ] })
   ] });
 }, O3 = Iu({
-  productionPrefix: "mcp-inspector",
+  productionPrefix: "mcp-playground",
   seed: "mcp"
 });
 function A3(r) {
   const e = Xm(!1);
-  return /* @__PURE__ */ k.jsx("div", { className: "mcp-inspector-root", children: /* @__PURE__ */ k.jsx(bm, { generateClassName: O3, children: /* @__PURE__ */ k.jsx(Nm, { theme: e, children: /* @__PURE__ */ k.jsx(P3, { ...r }) }) }) });
+  return /* @__PURE__ */ k.jsx("div", { className: "mcp-playground-root", children: /* @__PURE__ */ k.jsx(bm, { generateClassName: O3, children: /* @__PURE__ */ k.jsx(Nm, { theme: e, children: /* @__PURE__ */ k.jsx(P3, { ...r }) }) }) });
 }
 export {
-  A3 as MCPInspector,
+  A3 as MCPPlayground,
   A3 as default
 };

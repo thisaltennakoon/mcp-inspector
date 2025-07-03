@@ -16,7 +16,7 @@ const PingTab = ({ onPingClick }: { onPingClick: () => void }) => (
           <Button
             onClick={onPingClick}
             className="font-bold py-6 px-12 rounded-full"
-            testId="inspector-ping-btn"
+            testId="playground-ping-btn"
           >
             Ping Server
           </Button>

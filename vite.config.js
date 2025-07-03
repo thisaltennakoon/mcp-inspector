@@ -6,9 +6,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.js',
-      name: 'MCPInspector',
+      name: 'MCPPlayground',
       formats: ['es', 'umd'],
-      fileName: (format) => `mcp-inspector.${format}.js`
+      fileName: (format) => `mcp-playground.${format}.js`
     },
     rollupOptions: {
       external: ['react', 'react-dom'],

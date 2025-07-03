@@ -115,7 +115,7 @@ const Sidebar = ({
                   onClick={handleTokenRegenerate}
                   data-testid="auth-button"
                   aria-expanded={showBearerToken}
-                  testId="inspector-Authentication"
+                  testId="playground-Authentication"
                 >
                   Get Test Key
                 </Button>
@@ -208,7 +208,7 @@ const Sidebar = ({
                         case 'error':
                           return 'Connection Error!';
                         case 'error-connecting-to-proxy':
-                          return 'Error Connecting to MCP Inspector Proxy - Check Console logs';
+                          return 'Error Connecting to MCP Playground Proxy - Check Console logs';
                         default:
                           return 'Disconnected';
                       }

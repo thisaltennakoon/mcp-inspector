@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MCPInspector from './app/MCPInspector.tsx'
+import MCPPlayground from './app/MCPPlayground.tsx'
 
 ReactDOM.render(
     <React.StrictMode>
-        <MCPInspector/>
+        <MCPPlayground/>
     </React.StrictMode>,
     document.getElementById('root')
 )

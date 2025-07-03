@@ -150,7 +150,7 @@ export function useConnection({
     
     const client = new Client<Request, Notification, Result>(
       {
-        name: 'mcp-inspector',
+        name: 'mcp-playground',
         version: '0.13.0',
       },
       {
@@ -165,7 +165,7 @@ export function useConnection({
 
     try {
       // Inject auth manually instead of using SSEClientTransport, because we're
-      // proxying through the inspector server first.
+      // proxying through the playground server first.
       const headers: HeadersInit = {};
 
       if (token !== undefined) {
@@ -206,7 +206,7 @@ export function useConnection({
         });
       } catch (error) {
         console.error(
-          `Failed to connect to MCP Server via the MCP Inspector Proxy: ${mcpProxyServerUrl}:`,
+          `Failed to connect to MCP Server via the MCP Playground Proxy: ${mcpProxyServerUrl}:`,
           error
         );
         setConnectionStatus('error');

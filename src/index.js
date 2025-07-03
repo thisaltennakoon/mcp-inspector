@@ -1,7 +1,7 @@
 // import HelloWorld from './HelloWorld';
-import MCPInspector from './app/MCPInspector.tsx'
+import MCPPlayground from './app/MCPPlayground.tsx'
 
 // Named export
-export { MCPInspector };
+export { MCPPlayground };
 // Default export (must be the component itself, not an object)
-export default MCPInspector;
+export default MCPPlayground;

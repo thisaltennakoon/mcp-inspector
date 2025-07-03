@@ -102,7 +102,7 @@ const ToolsTab = ({
                   testId="notification-with-icon"
                 >
                   Tool calls for MCP servers created using existing API proxies
-                  are not yet supported in this inspector.
+                  are not yet supported in this playground.
                 </Notification>
               </Box>
             ) : (

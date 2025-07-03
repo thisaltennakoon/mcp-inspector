@@ -1,12 +1,12 @@
 {
-  "name": "mcp-inspector",
+  "name": "mcp-playground",
   "version": "1.0.0",
-  "main": "dist/mcp-inspector.umd.js",
-  "module": "dist/mcp-inspector.es.js",
+  "main": "dist/mcp-playground.umd.js",
+  "module": "dist/mcp-playground.es.js",
   "exports": {
     ".": {
-      "import": "./dist/mcp-inspector.es.js",
-      "require": "./dist/mcp-inspector.umd.js"
+      "import": "./dist/mcp-playground.es.js",
+      "require": "./dist/mcp-playground.umd.js"
     }
   },
   "types": "dist/index.d.ts",

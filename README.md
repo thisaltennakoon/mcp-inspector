@@ -1,10 +1,10 @@
-# MCP Inspector (Client-Side)
+# MCP Playground (Client-Side)
 
-A lightweight, fully client-side tool for testing MCP (Model Context Protocol) servers using streamable HTTP — no server-side dependencies required.
+A lightweight, fully client-side tool for inspecting and testing MCP (Model Context Protocol) servers using streamable HTTP — no server-side dependencies required.
 
 ## Overview
 
-This tool was built to provide a developer-friendly way to test MCP-compatible servers directly from the browser. Unlike existing solutions that rely on server-side intermediaries, this inspector is designed to run entirely on the client-side, making it easy to integrate into any web application or frontend project.
+This tool was built to provide a developer-friendly way to test and inspect MCP-compatible servers directly from the browser. Unlike existing solutions that rely on server-side intermediaries, this inspector is designed to run entirely on the client-side, making it easy to integrate into any web application or frontend project.
 
 ## Features
 
@@ -22,25 +22,28 @@ This tool was built to provide a developer-friendly way to test MCP-compatible s
 You can install the package directly from the GitHub repository using npm or yarn:
 
 ```bash
-npm install wso2/mcp-inspector
+npm install wso2/mcp-playground
 ```
 
 or
 
 ```bash
-yarn add wso2/mcp-inspector
+yarn add wso2/mcp-playground
 ```
 
 ### Usage
 
-Import and use the `MCPInspector` React component in your application:
+
+Import and use the `MCPPlayground` React component in your application. All props are optional and can be provided as needed:
 
 ```jsx
-import MCPInspector from 'wso2/mcp-inspector';
+import MCPPlayground from 'wso2/mcp-playground';
 
 const MyComponent = () => {
   const url = 'https://your-mcp-server.com/mcp';
   const token = 'your-auth-token';
+  const headerName = 'Authorization';
+  const shouldSetHeaderNameExternally = false;
   const isTokenFetching = false;
   const isUrlFetching = false;
 
@@ -49,9 +52,11 @@ const MyComponent = () => {
   };
 
   return (
-    <MCPInspector
+    <MCPPlayground
       url={url}
       token={token}
+      headerName={headerName}
+      shouldSetHeaderNameExternally={shouldSetHeaderNameExternally}
       isTokenFetching={isTokenFetching}
       isUrlFetching={isUrlFetching}
       handleTokenRegenerate={handleTokenRegenerate}
@@ -60,51 +65,24 @@ const MyComponent = () => {
 };
 ```
 
-Note: All props are optional. If not provided, the component will fall back to its internal defaults or show relevant placeholder behavior.
+You can omit any of the props if you want to use the component's internal defaults or placeholder behavior.
 
-## Activity History & Debugging
 
-The MCP Inspector includes a built-in activity history feature for better debugging and observability. The history tracks all MCP interactions including:
+## Props
 
-- **Connection Events**: Connect/disconnect operations with success/failure status
-- **Tool Operations**: Tool list fetching, tool calls with parameters and results
-- **Ping Operations**: Server ping requests and responses
-- **Error Tracking**: Detailed error information with context
-- **Performance Metrics**: Response times for operations
+The `MCPPlayground` component accepts the following props:
 
-### History Event Format
+| Prop                          | Type           | Description |
+|-------------------------------|----------------|-------------|
+| `url`                         | `string`      | The MCP server endpoint URL to connect to.|
+| `token`                       | `string`      | The authentication token to use for requests.|
+| `headerName`                  | `string`      | The name of the HTTP header to use for the token. If not set, `Authorization` default header may be used. |
+| `shouldSetHeaderNameExternally` | `boolean`   | If `true`, the component expects the parent to manage the header name for authentication. If `false` or omitted, the component manages it internally. |
+| `isTokenFetching`             | `boolean`     | Indicates if the token is currently being fetched. When `true`, the UI may show a loading state for the token. |
+| `isUrlFetching`               | `boolean`     | Indicates if the URL is currently being fetched. When `true`, the UI may show a loading state for the URL. |
+| `handleTokenRegenerate`       | `() => void`  | Callback function to trigger token regeneration. Useful for providing a button or action to refresh the token. |
 
-Each history event is a structured JSON object:
-
-```json
-{
-  "type": "info" | "error" | "debug" | "warning",
-  "timestamp": "2025-07-03T10:30:45.123Z",
-  "source": "connect|ping|listTools|callTool|makeRequest",
-  "message": "Human-readable description",
-  "details": {
-    "key": "value"
-  }
-}
-```
-
-### Accessing History
-
-The activity history is displayed in a **fixed panel at the bottom** of the MCP Inspector interface, providing consistent visibility regardless of tab selection or content changes. It provides:
-
-- Real-time event logging with color-coded severity levels (newest events at top)
-- Expandable details for each event  
-- Latest events appear at the top for immediate visibility
-- Clear history functionality
-- Automatic cleanup on connect/disconnect
-- **Fixed positioning** - remains stable at the bottom, unaffected by content changes in tabs
-- **Always visible** - maintains consistent placement across all interface states
-
-This feature is particularly useful for:
-- Debugging connection issues
-- Understanding MCP server behavior
-- Performance analysis
-- Error troubleshooting
+All props are optional. If not provided, the component will fall back to its internal defaults or show relevant placeholder behavior.
 
 ## License
 

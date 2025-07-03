@@ -3,7 +3,7 @@
 <head>
     <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
-    <script src="dist/mcp-inspector.umd.js"></script>
+    <script src="dist/mcp-playground.umd.js"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -11,7 +11,7 @@
     const rootElement = document.getElementById('root');
     // React 17 way
     // Use default export
-    ReactDOM.render(React.createElement(MCPInspector.default), rootElement);
+    ReactDOM.render(React.createElement(MCPPlayground.default), rootElement);
     // Or, named export:
     // ReactDOM.render(React.createElement(ReactHelloLib.HelloWorld), rootElement);
 </script>

@@ -11,7 +11,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { z } from 'zod';
 import { Box, Grid, Typography } from '@material-ui/core';
 import { MenuSubAPIManagement } from './components/ui/Icons/generated';
-import MCPInspectorConnect from './components/ui/Images/Templates/MCPInspectorConect.svg';
+import MCPPlaygroundConnect from './components/ui/Images/Templates/MCPPlaygroundConnect.svg';
 import { cacheToolOutputSchemas } from './utils/schemaUtils';
 import { useConnection } from './lib/hooks/useConnection';
 import { Tabs, TabsList, TabsTrigger } from './components/ui/tabs';
@@ -21,7 +21,7 @@ import ToolsTab from './components/ToolsTab';
 import HistoryPanel from './components/HistoryPanel';
 import { useStyles } from './style';
 
-interface InspectorProps {
+interface PlaygroundProps {
   url?: string;
   token?: string;
   headerName?: string;
@@ -32,7 +32,7 @@ interface InspectorProps {
   isMcpProxyWithOperationMapping?: boolean;
 }
 
-const Inspector = ({
+const Playground = ({
   url: initialUrl,
   token: initialToken,
   headerName: initialHeaderName,
@@ -41,7 +41,7 @@ const Inspector = ({
   isUrlFetching,
   handleTokenRegenerate,
   isMcpProxyWithOperationMapping,
-}: InspectorProps) => {
+}: PlaygroundProps) => {
   const classes = useStyles();
   const [token, setToken] = useState<string>();
   const [url, setUrl] = useState<string>();
@@ -115,7 +115,7 @@ const Inspector = ({
     addHistoryEvent('info', 'listTools', 'Fetching tools from MCP server', {
       nextCursor: nextToolCursor,
     });
-    
+
     const response = await sendMCPRequest(
       {
         method: 'tools/list' as const,
@@ -128,7 +128,7 @@ const Inspector = ({
     setNextToolCursor(response.nextCursor);
     // Cache output schemas for validation
     cacheToolOutputSchemas(response.tools);
-    
+
     addHistoryEvent('info', 'listTools', 'Tools fetched successfully', {
       toolCount: response.tools.length,
       hasNextCursor: !!response.nextCursor,
@@ -142,7 +142,7 @@ const Inspector = ({
       parameters: params,
       progressToken: progressTokenRef.current + 1,
     });
-    
+
     try {
       const response = await sendMCPRequest(
         {
@@ -159,7 +159,7 @@ const Inspector = ({
         'tools'
       );
       setToolResult(response);
-      
+
       addHistoryEvent('info', 'callTool', `Tool call completed successfully: ${name}`, {
         toolName: name,
         hasContent: !!response.content,
@@ -173,7 +173,7 @@ const Inspector = ({
         error: errorMessage,
         parameters: params,
       });
-      
+
       setToolResult({
         content: [
           {
@@ -192,7 +192,7 @@ const Inspector = ({
         MCP Playground
       </Typography>
       <Grid container md={12}>
-        <Grid item xs={12} md={3} className={classes.inspectorSlider}>
+        <Grid item xs={12} md={3} className={classes.playgroundSlider}>
           <Sidebar
             connectionStatus={connectionStatus}
             connectionError={connectionError}
@@ -210,9 +210,9 @@ const Inspector = ({
             onDisconnect={disconnectMcpServer}
           />
         </Grid>
-        <Grid item xs={12} md={8} className={classes.inspectorRightSlider}>
-          <Box 
-            className={classes.inspectorResult}
+        <Grid item xs={12} md={8} className={classes.playgroundRightSlider}>
+          <Box
+            className={classes.playgroundResult}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -223,7 +223,7 @@ const Inspector = ({
             {mcpClient ? (
               <>
                 {/* Main Content Area - Scrollable */}
-                <Box 
+                <Box
                   style={{
                     flex: '1 1 auto',
                     overflow: 'auto',
@@ -331,9 +331,9 @@ const Inspector = ({
                     </div>
                   </Tabs>
                 </Box>
-                
+
                 {/* Fixed History Panel at Bottom */}
-                <Box 
+                <Box
                   style={{
                     flex: '0 0 auto',
                     borderTop: '1px solid #e0e0e0',
@@ -354,7 +354,7 @@ const Inspector = ({
                 style={{ flex: '1 1 auto' }}
               >
                 <Box>
-                  <img src={MCPInspectorConnect} alt="MCP Inspector Connect" />
+                  <img src={MCPPlaygroundConnect} alt="MCP Playground Connect" />
                 </Box>
                 <Typography variant="h4">
                   Connect to an MCP server to start inspecting
@@ -368,4 +368,4 @@ const Inspector = ({
   );
 };
 
-export default Inspector;
+export default Playground;

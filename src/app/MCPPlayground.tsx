@@ -1,25 +1,25 @@
 import {ThemeProvider} from '@material-ui/core/styles';
 import { StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import useChoreoTheme from './theme/Theme.ts';
-import Inspector, { InspectorProps } from '../features/inspector/Inspector';
+import Playground, { PlaygroundProps } from '../features/playground/Playground';
 
 // Create a scoped class name generator to avoid conflicts
 const generateClassName = createGenerateClassName({
-    productionPrefix: 'mcp-inspector',
+    productionPrefix: 'mcp-playground',
     seed: 'mcp'
 });
 
-function MCPInspector(props: InspectorProps) {
+function MCPPlayground(props: PlaygroundProps) {
     const theme = useChoreoTheme(false);
     return (
-        <div className="mcp-inspector-root">
+        <div className="mcp-playground-root">
             <StylesProvider generateClassName={generateClassName}>
                 <ThemeProvider theme={theme}>
-                    <Inspector {...props}/>
+                    <Playground {...props}/>
                 </ThemeProvider>
             </StylesProvider>
         </div>
     )
 }
 
-export default MCPInspector
+export default MCPPlayground

@@ -20,7 +20,7 @@ export const useStyles = makeStyles((theme) => ({
     gap: theme.spacing(2),
     padding: theme.spacing(3),
   },
-  inspectorSlider: {
+  playgroundSlider: {
     border: `1px solid ${theme.palette.grey[200]}`,
     padding: theme.spacing(2),
     borderRadius: theme.spacing(1),
@@ -28,13 +28,13 @@ export const useStyles = makeStyles((theme) => ({
     boxShadow: `0 0 1px ${theme.palette.secondary.main}, 0 1px 2px ${theme.palette.grey[100]}`,
     marginRight: theme.spacing(1),
   },
-  inspectorRightSlider: {
+  playgroundRightSlider: {
     // border: `1px solid ${theme.palette.grey[200]}`,
     padding: theme.spacing(0, 2),
     borderRadius: theme.spacing(1),
     marginRight: theme.spacing(1),
   },
-  inspectorResult: {
+  playgroundResult: {
     overflow: 'auto',
     minHeight: theme.spacing(90),
     borderBottom: `1px solid ${theme.palette.grey[200]}`,

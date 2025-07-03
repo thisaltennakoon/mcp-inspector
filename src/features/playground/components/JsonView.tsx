@@ -97,7 +97,7 @@ const JsonView = memo(
               variant="subtle"
               className={classes.copyButton}
               onClick={handleCopy}
-              testId="inspector-response-copy"
+              testId="playground-response-copy"
             >
               {copied ? (
                 <Tick className={classes.copySuccessIcon} />
