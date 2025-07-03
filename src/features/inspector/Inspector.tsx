@@ -155,7 +155,7 @@ const Inspector = ({
   return (
     <Box className={classes.componentLevelPageContainer}>
       <Typography variant="h3">
-        MCP Inspector
+        MCP Playground
       </Typography>
       <Grid container md={12}>
         <Grid item xs={12} md={3} className={classes.inspectorSlider}>
