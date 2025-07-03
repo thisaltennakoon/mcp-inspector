@@ -2,12 +2,9 @@ import React from 'react';
 import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { HistoryEvent } from '../lib/constants';
-import Button from './ui/Button/Button';
-import { Clear } from './ui/Icons/generated';
 
 interface HistoryPanelProps {
   history: HistoryEvent[];
-  onClear?: () => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -99,14 +96,9 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${theme.palette.grey[200]}`,
     color: theme.palette.common.black,
   },
-  clearButton: {
-    fontSize: '12px',
-    padding: '4px 8px',
-    minHeight: 'auto',
-  },
 }));
 
-const HistoryPanel: React.FC<HistoryPanelProps> = ({ history, onClear }) => {
+const HistoryPanel: React.FC<HistoryPanelProps> = ({ history }) => {
   const classes = useStyles();
 
   const getEventColor = (type: string, theme: any) => {
@@ -134,32 +126,20 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ history, onClear }) => {
         <Typography className={classes.historyTitle}>
           Activity History
         </Typography>
-        {onClear && history.length > 0 && (
-          <Button
-            onClick={onClear}
-            size="small"
-            variant="outlined"
-            startIcon={<Clear className="w-3 h-3" />}
-            testId="clear-history-btn"
-            className={classes.clearButton}
-          >
-            Clear
-          </Button>
-        )}
       </Box>
-      
+
       <div className={classes.historyContent}>
         {history.length === 0 ? (
           <div className={classes.emptyState}>
-            No activity yet. Connect to an MCP server to see real-time events (newest first).
+            No activity yet.
           </div>
         ) : (
           <div>
             {history.map((event, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className={classes.eventItem}
-                style={{ 
+                style={{
                   borderLeft: `3px solid ${getEventColor(event.type, { palette: { 
                     error: { main: '#fe523c' },
                     warning: { main: '#ff9d52' },
@@ -172,10 +152,10 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ history, onClear }) => {
                   <span className={classes.eventTimestamp}>
                     [{formatTime(event.timestamp)}]
                   </span>
-                  <span 
+                  <span
                     className={classes.eventType}
-                    style={{ 
-                      color: getEventColor(event.type, { palette: { 
+                    style={{
+                      color: getEventColor(event.type, { palette: {
                         error: { main: '#fe523c' },
                         warning: { main: '#ff9d52' },
                         primary: { main: '#1A4C6D' },
