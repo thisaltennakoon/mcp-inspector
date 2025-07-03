@@ -15,10 +15,10 @@ import MCPInspectorConnect from './components/ui/Images/Templates/MCPInspectorCo
 import { cacheToolOutputSchemas } from './utils/schemaUtils';
 import { useConnection } from './lib/hooks/useConnection';
 import { Tabs, TabsList, TabsTrigger } from './components/ui/tabs';
-import ConsoleTab from './components/ConsoleTab';
 import PingTab from './components/PingTab';
 import Sidebar from './components/Sidebar';
 import ToolsTab from './components/ToolsTab';
+import HistoryPanel from './components/HistoryPanel';
 import { useStyles } from './style';
 
 interface InspectorProps {
@@ -74,6 +74,9 @@ const Inspector = ({
     makeRequest,
     connect: connectMcpServer,
     disconnect: disconnectMcpServer,
+    history,
+    addHistoryEvent,
+    clearHistory,
   } = useConnection({
     url,
     token,
@@ -108,6 +111,10 @@ const Inspector = ({
   };
 
   const listTools = async () => {
+    addHistoryEvent('info', 'listTools', 'Fetching tools from MCP server', {
+      nextCursor: nextToolCursor,
+    });
+    
     const response = await sendMCPRequest(
       {
         method: 'tools/list' as const,
@@ -120,9 +127,21 @@ const Inspector = ({
     setNextToolCursor(response.nextCursor);
     // Cache output schemas for validation
     cacheToolOutputSchemas(response.tools);
+    
+    addHistoryEvent('info', 'listTools', 'Tools fetched successfully', {
+      toolCount: response.tools.length,
+      hasNextCursor: !!response.nextCursor,
+      toolNames: response.tools.map(tool => tool.name),
+    });
   };
 
   const callTool = async (name: string, params: Record<string, unknown>) => {
+    addHistoryEvent('info', 'callTool', `Calling MCP tool: ${name}`, {
+      toolName: name,
+      parameters: params,
+      progressToken: progressTokenRef.current + 1,
+    });
+    
     try {
       const response = await sendMCPRequest(
         {
@@ -139,12 +158,26 @@ const Inspector = ({
         'tools'
       );
       setToolResult(response);
+      
+      addHistoryEvent('info', 'callTool', `Tool call completed successfully: ${name}`, {
+        toolName: name,
+        hasContent: !!response.content,
+        contentLength: Array.isArray(response.content) ? response.content.length : 0,
+        isError: response.isError || false,
+      });
     } catch (e) {
+      const errorMessage = (e as Error).message ?? String(e);
+      addHistoryEvent('error', 'callTool', `Tool call failed: ${name}`, {
+        toolName: name,
+        error: errorMessage,
+        parameters: params,
+      });
+      
       setToolResult({
         content: [
           {
             type: 'text',
-            text: (e as Error).message ?? String(e),
+            text: errorMessage,
           },
         ],
         isError: true,
@@ -167,7 +200,7 @@ const Inspector = ({
             setToken={setToken}
             headerName={headerName}
             setHeaderName={setHeaderName}
-            shouldSetHeaderNameExternally={shouldSetHeaderNameExternally}
+            shouldSetHeaderNameExternally={shouldSetHeaderNameExternally || false}
             isTokenFetching={isTokenFetching}
             isUrlFetching={isUrlFetching}
             handleTokenRegenerate={handleTokenRegenerate}
@@ -176,102 +209,147 @@ const Inspector = ({
           />
         </Grid>
         <Grid item xs={12} md={8} className={classes.inspectorRightSlider}>
-          <Box className={classes.inspectorResult}>
+          <Box 
+            className={classes.inspectorResult}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100vh',
+              overflow: 'hidden'
+            }}
+          >
             {mcpClient ? (
-              <Tabs
-                defaultValue="tools"
-                className="w-full p-4"
-                onValueChange={(value) => {
-                  window.location.hash = value;
-                }}
-              >
-                <TabsList className={classes.tabsList}>
-                  <TabsTrigger value="tools" className={classes.tabTrigger}>
-                    <MenuSubAPIManagement className={classes.tabIcon} />
-                    Tools
-                  </TabsTrigger>
-                  <TabsTrigger value="ping" className={classes.tabTrigger}>
-                    <NotificationsIcon className={classes.tabIcon} />
-                    Ping
-                  </TabsTrigger>
-                </TabsList>
+              <>
+                {/* Main Content Area - Scrollable */}
+                <Box 
+                  style={{
+                    flex: '1 1 auto',
+                    overflow: 'auto',
+                    minHeight: 0
+                  }}
+                >
+                  <Tabs
+                    defaultValue="tools"
+                    className="w-full p-4"
+                    onValueChange={(value) => {
+                      window.location.hash = value;
+                    }}
+                  >
+                    <TabsList className={classes.tabsList}>
+                      <TabsTrigger value="tools" className={classes.tabTrigger}>
+                        <MenuSubAPIManagement className={classes.tabIcon} />
+                        Tools
+                      </TabsTrigger>
+                      <TabsTrigger value="ping" className={classes.tabTrigger}>
+                        <NotificationsIcon className={classes.tabIcon} />
+                        Ping
+                      </TabsTrigger>
+                    </TabsList>
 
-                <div className="w-full">
-                  {!serverCapabilities?.tools ? (
-                    <>
-                      <div className="flex items-center justify-center p-4">
-                        <p className="text-lg text-gray-500 dark:text-gray-400">
-                          The connected server does not support any MCP
-                          capabilities
-                        </p>
-                      </div>
-                      <PingTab
-                        onPingClick={() => {
-                          sendMCPRequest(
-                            {
-                              method: 'ping' as const,
-                            },
-                            EmptyResultSchema
-                          ).catch((e) => {
-                            console.error('Ping failed:', e);
-                          });
-                        }}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <ToolsTab
-                        tools={tools}
-                        listTools={() => {
-                          clearError('tools');
-                          listTools();
-                        }}
-                        clearTools={() => {
-                          setTools([]);
-                          setNextToolCursor(undefined);
-                          // Clear cached output schemas
-                          cacheToolOutputSchemas([]);
-                        }}
-                        callTool={async (name, params) => {
-                          clearError('tools');
-                          setToolResult(null);
-                          await callTool(name, params);
-                        }}
-                        selectedTool={selectedTool}
-                        setSelectedTool={(tool) => {
-                          clearError('tools');
-                          setSelectedTool(tool);
-                          setToolResult(null);
-                        }}
-                        toolResult={toolResult}
-                        nextCursor={nextToolCursor}
-                        isMcpProxyWithOperationMapping={
-                          isMcpProxyWithOperationMapping
-                        }
-                      />
-                      <ConsoleTab />
-                      <PingTab
-                        onPingClick={() => {
-                          sendMCPRequest(
-                            {
-                              method: 'ping' as const,
-                            },
-                            EmptyResultSchema
-                          ).catch((e) => {
-                            console.error('Ping failed:', e);
-                          });
-                        }}
-                      />
-                    </>
-                  )}
-                </div>
-              </Tabs>
+                    <div className="w-full">
+                      {!serverCapabilities?.tools ? (
+                        <>
+                          <div className="flex items-center justify-center p-4">
+                            <p className="text-lg text-gray-500 dark:text-gray-400">
+                              The connected server does not support any MCP
+                              capabilities
+                            </p>
+                          </div>
+                          <PingTab
+                            onPingClick={() => {
+                              addHistoryEvent('info', 'ping', 'Sending ping to MCP server (no tools mode)');
+                              sendMCPRequest(
+                                {
+                                  method: 'ping' as const,
+                                },
+                                EmptyResultSchema
+                              ).then(() => {
+                                addHistoryEvent('info', 'ping', 'Ping successful (no tools mode)');
+                              }).catch((e) => {
+                                addHistoryEvent('error', 'ping', 'Ping failed (no tools mode)', {
+                                  error: e instanceof Error ? e.message : String(e),
+                                });
+                                console.error('Ping failed:', e);
+                              });
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <ToolsTab
+                            tools={tools}
+                            listTools={() => {
+                              clearError('tools');
+                              listTools();
+                            }}
+                            clearTools={() => {
+                              addHistoryEvent('info', 'clearTools', 'Clearing tools cache');
+                              setTools([]);
+                              setNextToolCursor(undefined);
+                              // Clear cached output schemas
+                              cacheToolOutputSchemas([]);
+                            }}
+                            callTool={async (name, params) => {
+                              clearError('tools');
+                              setToolResult(null);
+                              await callTool(name, params);
+                            }}
+                            selectedTool={selectedTool}
+                            setSelectedTool={(tool) => {
+                              clearError('tools');
+                              setSelectedTool(tool);
+                              setToolResult(null);
+                            }}
+                            toolResult={toolResult}
+                            nextCursor={nextToolCursor}
+                            isMcpProxyWithOperationMapping={
+                              isMcpProxyWithOperationMapping
+                            }
+                          />
+                          <PingTab
+                            onPingClick={() => {
+                              addHistoryEvent('info', 'ping', 'Sending ping to MCP server');
+                              sendMCPRequest(
+                                {
+                                  method: 'ping' as const,
+                                },
+                                EmptyResultSchema
+                              ).then(() => {
+                                addHistoryEvent('info', 'ping', 'Ping successful');
+                              }).catch((e) => {
+                                addHistoryEvent('error', 'ping', 'Ping failed', {
+                                  error: e instanceof Error ? e.message : String(e),
+                                });
+                                console.error('Ping failed:', e);
+                              });
+                            }}
+                          />
+                        </>
+                      )}
+                    </div>
+                  </Tabs>
+                </Box>
+                
+                {/* Fixed History Panel at Bottom */}
+                <Box 
+                  style={{
+                    flex: '0 0 auto',
+                    borderTop: '1px solid #e0e0e0',
+                    backgroundColor: '#fafafa'
+                  }}
+                >
+                  <Box px={4} py={2}>
+                    <HistoryPanel history={history} onClear={clearHistory} />
+                  </Box>
+                </Box>
+              </>
             ) : (
               <Box
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
                 justifyContent="center"
+                style={{ flex: '1 1 auto' }}
               >
                 <Box>
                   <img src={MCPInspectorConnect} alt="MCP Inspector Connect" />
