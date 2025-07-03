@@ -69,6 +69,7 @@ const Inspector = ({
 
   const {
     connectionStatus,
+    connectionError,
     serverCapabilities,
     mcpClient,
     makeRequest,
@@ -194,6 +195,7 @@ const Inspector = ({
         <Grid item xs={12} md={3} className={classes.inspectorSlider}>
           <Sidebar
             connectionStatus={connectionStatus}
+            connectionError={connectionError}
             url={url}
             setUrl={setUrl}
             token={token}

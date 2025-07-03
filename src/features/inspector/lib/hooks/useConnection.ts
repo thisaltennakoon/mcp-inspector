@@ -26,6 +26,7 @@ export function useConnection({
 }: UseConnectionOptions) {
   const [connectionStatus, setConnectionStatus] =
     useState<ConnectionStatus>('disconnected');
+  const [connectionError, setConnectionError] = useState<string | null>(null);
   const [serverCapabilities, setServerCapabilities] =
     useState<ServerCapabilities | null>(null);
   const [mcpClient, setMcpClient] = useState<Client | null>(null);
@@ -137,6 +138,7 @@ export function useConnection({
 
   const connect = async (_e?: unknown, retryCount: number = 0) => {
     setConnectionStatus('connecting');
+    setConnectionError(null); // Clear previous errors
     clearHistory(); // Clear history on new connection
     
     addHistoryEvent('info', 'connect', 'Starting MCP server connection', {
@@ -211,6 +213,7 @@ export function useConnection({
 
         if (is401Error(error)) {
           const authError = 'Internal key authentication failed. Make sure you have provided the correct security credentials';
+          setConnectionError(authError);
           addHistoryEvent('error', 'connect', 'Authentication failed', {
             error: error instanceof Error ? error.message : String(error),
             isAuthError: true,
@@ -220,6 +223,7 @@ export function useConnection({
         }
         
         const errorMessage = error instanceof Error ? error.message : String(error);
+        setConnectionError(errorMessage);
         addHistoryEvent('error', 'connect', 'Connection failed', {
           error: errorMessage,
           url: mcpProxyServerUrl.toString(),
@@ -231,14 +235,17 @@ export function useConnection({
 
       setMcpClient(client);
       setConnectionStatus('connected');
+      setConnectionError(null); // Clear error on successful connection
       addHistoryEvent('info', 'connect', 'MCP connection established successfully', {
         hasCapabilities: !!capabilities,
       });
     } catch (e) {
       console.error(e);
       setConnectionStatus('error');
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      setConnectionError(errorMessage);
       addHistoryEvent('error', 'connect', 'Unexpected error during connection', {
-        error: e instanceof Error ? e.message : String(e),
+        error: errorMessage,
       });
     }
   };
@@ -252,6 +259,7 @@ export function useConnection({
       setMcpClient(null);
       setClientTransport(null);
       setConnectionStatus('disconnected');
+      setConnectionError(null); // Clear errors on disconnect
       setServerCapabilities(null);
       
       addHistoryEvent('info', 'disconnect', 'MCP disconnection completed successfully');
@@ -264,6 +272,7 @@ export function useConnection({
       setMcpClient(null);
       setClientTransport(null);
       setConnectionStatus('disconnected');
+      setConnectionError(null); // Clear errors even on disconnect error
       setServerCapabilities(null);
       clearHistory();
     }
@@ -271,6 +280,7 @@ export function useConnection({
 
   return {
     connectionStatus,
+    connectionError,
     serverCapabilities,
     mcpClient,
     makeRequest,
