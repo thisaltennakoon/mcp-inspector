@@ -30,6 +30,7 @@ interface InspectorProps {
   isUrlFetching?: boolean;
   handleTokenRegenerate?: () => void;
   isMcpProxyWithOperationMapping?: boolean;
+  tokenPlaceholder?: string;
 }
 
 const Inspector = ({
@@ -41,6 +42,7 @@ const Inspector = ({
   isUrlFetching,
   handleTokenRegenerate,
   isMcpProxyWithOperationMapping,
+  tokenPlaceholder,
 }: InspectorProps) => {
   const classes = useStyles();
   const [token, setToken] = useState<string>();
@@ -208,6 +210,7 @@ const Inspector = ({
             handleTokenRegenerate={handleTokenRegenerate}
             onConnect={connectMcpServer}
             onDisconnect={disconnectMcpServer}
+            tokenPlaceholder={tokenPlaceholder}
           />
         </Grid>
         <Grid item xs={12} md={8} className={classes.inspectorRightSlider}>
