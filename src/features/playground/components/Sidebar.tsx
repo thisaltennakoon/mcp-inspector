@@ -27,6 +27,7 @@ interface SidebarProps {
   handleTokenRegenerate?: () => void;
   onConnect: () => void;
   onDisconnect: () => void;
+  tokenPlaceholder?: string;
 }
 
 const Sidebar = ({
@@ -44,6 +45,7 @@ const Sidebar = ({
   handleTokenRegenerate,
   onConnect,
   onDisconnect,
+  tokenPlaceholder,
 }: SidebarProps) => {
   const [showBearerToken, setShowBearerToken] = useState(false);
   const [showPassword, toggleInputType] = React.useState(false);
@@ -91,7 +93,7 @@ const Sidebar = ({
                 value={token}
                 type={showPassword ? 'text' : 'password'}
                 onChange={(e) => setToken(e.target.value)}
-                placeholder="Add Your Token"
+                placeholder={tokenPlaceholder || "Add Your Token"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton

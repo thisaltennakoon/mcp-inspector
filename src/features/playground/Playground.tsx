@@ -30,6 +30,7 @@ interface PlaygroundProps {
   isUrlFetching?: boolean;
   handleTokenRegenerate?: () => void;
   isMcpProxyWithOperationMapping?: boolean;
+  tokenPlaceholder?: string;
 }
 
 const Playground = ({
@@ -41,6 +42,7 @@ const Playground = ({
   isUrlFetching,
   handleTokenRegenerate,
   isMcpProxyWithOperationMapping,
+  tokenPlaceholder,
 }: PlaygroundProps) => {
   const classes = useStyles();
   const [token, setToken] = useState<string>();
@@ -208,6 +210,7 @@ const Playground = ({
             handleTokenRegenerate={handleTokenRegenerate}
             onConnect={connectMcpServer}
             onDisconnect={disconnectMcpServer}
+            tokenPlaceholder={tokenPlaceholder}
           />
         </Grid>
         <Grid item xs={12} md={8} className={classes.playgroundRightSlider}>
