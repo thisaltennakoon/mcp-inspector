@@ -339,13 +339,10 @@ const Playground = ({
                 <Box
                   style={{
                     flex: '0 0 auto',
-                    borderTop: '1px solid #e0e0e0',
                     backgroundColor: '#fafafa'
                   }}
                 >
-                  <Box px={4} py={2}>
-                    <HistoryPanel history={history} onClear={clearHistory} />
-                  </Box>
+                  <HistoryPanel history={history} />
                 </Box>
               </>
             ) : (

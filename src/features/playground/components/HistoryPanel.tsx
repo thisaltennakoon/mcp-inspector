@@ -2,6 +2,8 @@ import React from 'react';
 import { Box, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { HistoryEvent } from '../lib/constants';
+import { useVerticalResize } from './hooks/useVerticalResize';
+import ResizeHandle from './ResizeHandle';
 
 interface HistoryPanelProps {
   history: HistoryEvent[];
@@ -9,9 +11,12 @@ interface HistoryPanelProps {
 
 const useStyles = makeStyles((theme) => ({
   historyContainer: {
-    borderRadius: 8,
+    borderRadius: '8px 8px 0 0',
     border: '1px solid #e5e7eb',
     backgroundColor: '#fff',
+    borderBottom: 'none', // Remove bottom border since resize handle provides it
+    display: 'flex',
+    flexDirection: 'column',
   },
   historyHeader: {
     padding: theme.spacing(1, 2),
@@ -19,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: '8px 8px 0 0',
+    flexShrink: 0,
   },
   historyTitle: {
     fontWeight: 600,
@@ -29,11 +37,11 @@ const useStyles = makeStyles((theme) => ({
   historyContent: {
     backgroundColor: '#F2F8FE',
     padding: theme.spacing(1.5, 2),
-    borderRadius: '0 0 8px 8px',
-    height: '180px',
+    flex: 1,
     overflowY: 'auto',
     fontSize: '12px',
     fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+    minHeight: 0, // Important for flex container
   },
   emptyState: {
     opacity: 0.6,
@@ -100,6 +108,14 @@ const useStyles = makeStyles((theme) => ({
 
 const HistoryPanel: React.FC<HistoryPanelProps> = ({ history }) => {
   const classes = useStyles();
+  
+  // Initialize vertical resize functionality
+  const { height, isResizing, resizeHandleProps } = useVerticalResize({
+    defaultHeight: 300,
+    minHeight: 120,
+    maxHeight: 600,
+    storageKey: 'mcp-inspector-history-panel-height',
+  });
 
   const getEventColor = (type: string, theme: any) => {
     switch (type) {
@@ -121,72 +137,84 @@ const HistoryPanel: React.FC<HistoryPanelProps> = ({ history }) => {
   };
 
   return (
-    <Box className={classes.historyContainer}>
-      <Box className={classes.historyHeader}>
-        <Typography className={classes.historyTitle}>
-          Activity History
-        </Typography>
-      </Box>
+    <Box>
+      {/* Resize Handle */}
+      <ResizeHandle 
+        onMouseDown={resizeHandleProps.onMouseDown}
+        isResizing={isResizing}
+      />
+      
+      {/* History Panel Container */}
+      <Box 
+        className={classes.historyContainer}
+        style={{ height: `${height}px` }}
+      >
+        <Box className={classes.historyHeader}>
+          <Typography className={classes.historyTitle}>
+            Activity History
+          </Typography>
+        </Box>
 
-      <div className={classes.historyContent}>
-        {history.length === 0 ? (
-          <div className={classes.emptyState}>
-            No activity yet.
-          </div>
-        ) : (
-          <div>
-            {history.map((event, index) => (
-              <div
-                key={index}
-                className={classes.eventItem}
-                style={{
-                  borderLeft: `3px solid ${getEventColor(event.type, { palette: { 
-                    error: { main: '#fe523c' },
-                    warning: { main: '#ff9d52' },
-                    primary: { main: '#1A4C6D' },
-                    grey: { 500: '#9ca3af', 600: '#6b7280' }
-                  }})}`,
-                }}
-              >
-                <div className={classes.eventHeader}>
-                  <span className={classes.eventTimestamp}>
-                    [{formatTime(event.timestamp)}]
-                  </span>
-                  <span
-                    className={classes.eventType}
-                    style={{
-                      color: getEventColor(event.type, { palette: {
-                        error: { main: '#fe523c' },
-                        warning: { main: '#ff9d52' },
-                        primary: { main: '#1A4C6D' },
-                        grey: { 500: '#9ca3af', 600: '#6b7280' }
-                      }})
-                    }}
-                  >
-                    {event.type.toUpperCase()}
-                  </span>
-                  <span className={classes.eventSource}>
-                    {event.source}
-                  </span>
+        <div className={classes.historyContent}>
+          {history.length === 0 ? (
+            <div className={classes.emptyState}>
+              No activity yet.
+            </div>
+          ) : (
+            <div>
+              {history.map((event, index) => (
+                <div
+                  key={index}
+                  className={classes.eventItem}
+                  style={{
+                    borderLeft: `3px solid ${getEventColor(event.type, { palette: { 
+                      error: { main: '#fe523c' },
+                      warning: { main: '#ff9d52' },
+                      primary: { main: '#1A4C6D' },
+                      grey: { 500: '#9ca3af', 600: '#6b7280' }
+                    }})}`,
+                  }}
+                >
+                  <div className={classes.eventHeader}>
+                    <span className={classes.eventTimestamp}>
+                      [{formatTime(event.timestamp)}]
+                    </span>
+                    <span
+                      className={classes.eventType}
+                      style={{
+                        color: getEventColor(event.type, { palette: {
+                          error: { main: '#fe523c' },
+                          warning: { main: '#ff9d52' },
+                          primary: { main: '#1A4C6D' },
+                          grey: { 500: '#9ca3af', 600: '#6b7280' }
+                        }})
+                      }}
+                    >
+                      {event.type.toUpperCase()}
+                    </span>
+                    <span className={classes.eventSource}>
+                      {event.source}
+                    </span>
+                  </div>
+                  <div className={classes.eventMessage}>
+                    {event.message}
+                  </div>
+                  {event.details && Object.keys(event.details).length > 0 && (
+                    <details className={classes.eventDetails}>
+                      <summary className={classes.detailsSummary}>
+                        Details
+                      </summary>
+                      <pre className={classes.detailsContent}>
+                        {JSON.stringify(event.details, null, 2)}
+                      </pre>
+                    </details>
+                  )}
                 </div>
-                <div className={classes.eventMessage}>
-                  {event.message}
-                </div>
-                {event.details && Object.keys(event.details).length > 0 && (
-                  <details className={classes.eventDetails}>
-                    <summary className={classes.detailsSummary}>
-                      Details
-                    </summary>
-                    <pre className={classes.detailsContent}>
-                      {JSON.stringify(event.details, null, 2)}
-                    </pre>
-                  </details>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </Box>
     </Box>
   );
 };
